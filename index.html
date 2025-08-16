@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The O'Faolain SMP</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #e0f7fa, #ffffff); 
+            text-align: center;
+        }
+        h1 {
+            font-size: 4em;
+            margin: 0.2em 0;
+        }
+        .green { color: #008000; }   
+        .white { color: #ffffff; text-shadow: 1px 1px 2px #000; } 
+        .orange { color: #ff9933; } 
+        .ip-container {
+            margin-top: 2em;
+        }
+        .ip-button {
+            font-size: 1.5em;
+            padding: 0.5em 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #008CBA;
+            color: white;
+            transition: background 0.3s;
+        }
+        .ip-button:hover {
+            background-color: #005f73;
+        }
+        .copied {
+            margin-top: 0.5em;
+            color: green;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1><span class="green">The</span> <span class="white">O'Faolain</span> <span class="orange">SMP</span></h1>
+
+    <div class="ip-container">
+        <button class="ip-button" onclick="copyIP()">Copy Server IP: 136.243.42.253:50229</button>
+        <div id="copiedMessage" class="copied">IP Copied!</div>
+    </div>
+
+    <script>
+        function copyIP() {
+            const ip = "136.243.42.253:50229";
+            navigator.clipboard.writeText(ip).then(() => {
+                const msg = document.getElementById("copiedMessage");
+                msg.style.display = "block";
+                setTimeout(() => msg.style.display = "none", 1500);
+            });
+        }
+    </script>
+</body>
+</html>
