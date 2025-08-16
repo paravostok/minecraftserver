@@ -14,9 +14,10 @@
     }
 
     body {
-        background: url('stitched.jpg') repeat-x;
-        background-size: cover;
-        animation: scroll 120s linear infinite; 
+        background: url('panorama_0.png'), url('panorama_1.png'), url('panorama_2.png'), url('panorama_3.png');
+        background-repeat: repeat-x;
+        background-size: auto 100%;
+        animation: scroll 120s linear infinite;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -24,8 +25,8 @@
     }
 
     @keyframes scroll {
-        0% { background-position: 0 0; }
-        100% { background-position: -3000px 0; }
+        0% { background-position: 0 0, 100% 0, 200% 0, 300% 0; }
+        100% { background-position: -400% 0, -300% 0, -200% 0, -100% 0; }
     }
 
     h1 {
