@@ -47,7 +47,7 @@
             font-weight: 700;
         }
 
-        .ip-container, .server-status-container, .player-list-container {
+        .ip-container, .server-status-container {
             margin-top: 1rem;
             padding: 0.5rem 1rem;
             background-color: rgba(255, 255, 255, 0.1);
@@ -68,33 +68,6 @@
             color: #fff;
         }
         
-        #players-online {
-            font-size: 1.2em;
-        }
-
-        .player-list-container {
-            cursor: default;
-            margin-top: 0.5rem;
-            max-height: 200px;
-            overflow-y: auto;
-            display: none; /* Initially hidden */
-        }
-
-        .player-list-container.visible {
-            display: block;
-        }
-        
-        #player-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            font-size: 1em;
-        }
-
-        #player-list li {
-            padding: 0.2rem 0;
-        }
-        
         .green { color: #008000; }
         .white { color: #ffffff; text-shadow: 1px 1px 2px black; }
         .orange { color: #ff9933; }
@@ -109,10 +82,6 @@
 
     <div class="server-status-container">
         <span id="player-status-text" class="status-text">Loading server status...</span>
-    </div>
-    
-    <div class="player-list-container">
-        <ul id="player-list"></ul>
     </div>
 
     <script>
@@ -140,12 +109,8 @@
 
         async function fetchServerStatus() {
             const statusText = document.getElementById('player-status-text');
-            const playerListContainer = document.querySelector('.player-list-container');
-            const playerList = document.getElementById('player-list');
 
             statusText.innerText = 'Fetching status...';
-            playerListContainer.classList.remove('visible');
-            playerList.innerHTML = '';
 
             try {
                 const url = `https://api.mcsrvstat.us/2/${serverIp}`;
@@ -156,32 +121,13 @@
                     const onlinePlayers = data.players.online;
                     const maxPlayers = data.players.max;
                     
-                    statusText.innerHTML = `<span id="players-online">${onlinePlayers}</span> / <span id="players-max">${maxPlayers}</span> players online`;
-
-                    if (data.players.list) {
-                        playerList.innerHTML = '';
-                        // Check if the player object and its name property exist before displaying
-                        data.players.list.forEach(player => {
-                            if (player && player.name) {
-                                const listItem = document.createElement('li');
-                                listItem.innerText = player.name;
-                                playerList.appendChild(listItem);
-                            }
-                        });
-                        playerListContainer.classList.add('visible');
-                    } else if (onlinePlayers > 0) {
-                        // Server is online with players, but no list is provided
-                        playerList.innerHTML = '<li>Player list is hidden.</li>';
-                        playerListContainer.classList.add('visible');
-                    }
+                    statusText.innerHTML = `${onlinePlayers} / ${maxPlayers} players online`;
                 } else {
                     statusText.innerText = 'Server is currently offline.';
-                    playerListContainer.classList.remove('visible');
                 }
             } catch (error) {
                 console.error('Failed to fetch server status:', error);
                 statusText.innerText = 'Error fetching server status.';
-                playerListContainer.classList.remove('visible');
             }
         }
         
