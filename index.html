@@ -77,7 +77,7 @@
             margin-top: 0.5rem;
             max-height: 200px;
             overflow-y: auto;
-            display: none; 
+            display: none; /* Initially hidden */
         }
 
         .player-list-container.visible {
@@ -160,14 +160,17 @@
 
                     if (data.players.list) {
                         playerList.innerHTML = '';
+                        // Check if the player object and its name property exist before displaying
                         data.players.list.forEach(player => {
-                            const listItem = document.createElement('li');
-                            listItem.innerText = player.name;
-                            playerList.appendChild(listItem);
+                            if (player && player.name) {
+                                const listItem = document.createElement('li');
+                                listItem.innerText = player.name;
+                                playerList.appendChild(listItem);
+                            }
                         });
                         playerListContainer.classList.add('visible');
                     } else if (onlinePlayers > 0) {
-                    
+                        // Server is online with players, but no list is provided
                         playerList.innerHTML = '<li>Player list is hidden.</li>';
                         playerListContainer.classList.add('visible');
                     }
@@ -182,8 +185,10 @@
             }
         }
         
+        // Fetch status on page load
         fetchServerStatus();
-        
+
+        // Refresh status every 30 seconds
         setInterval(fetchServerStatus, 30000);
     </script>
 </body>
