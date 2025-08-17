@@ -1,81 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The O'Faolain SMP</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The O'Faolain SMP</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+    }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('stitchedv2.png') repeat-x;
-            background-size: cover;
-            animation: scroll 120s linear infinite;
-            filter: blur(5px);
-            z-index: -1;
-        }
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('stitchedv2.png') repeat-x;
+        animation: scroll 120s linear infinite; 
+        filter: blur(5px);
+        z-index: -1;
+    }
 
-        @keyframes scroll {
-            0% { background-position: 0 0; }
-            100% { background-position: -3000px 0; }
-        }
+    @keyframes scroll {
+        0% { background-position: 0 0; }
+        100% { background-position: -3000px 0; } 
+    }
 
-        h1 {
-            font-size: 4em;
-            color: white;
-            text-shadow: 2px 2px 6px black;
-            margin: 0.2em 0;
-            font-weight: 700;
-        }
+    h1 {
+        font-size: 4em;
+        color: white;
+        text-shadow: 2px 2px 6px black;
+        margin: 0.2em 0;
+        font-weight: 700;
+    }
 
-        .ip-container, .server-status-container {
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            user-select: none;
-            text-shadow: 1px 1px 2px #000;
-            color: #fff;
-        }
+    .ip-container, .server-status-container {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        user-select: none;
+        text-shadow: 1px 1px 2px #000;
+        color: #fff;
+    }
 
-        .ip-container:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
+    .ip-container:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
 
-        #ip-address, .status-text {
-            font-size: 1.5em;
-            color: #fff;
-        }
-        
-        .green { color: #008000; }
-        .white { color: #ffffff; text-shadow: 1px 1px 2px black; }
-        .orange { color: #ff9933; }
-    </style>
+    #ip-address, .status-text {
+        font-size: 1.5em;
+        color: #fff;
+    }
+
+    .green { color: #008000; }
+    .white { color: #ffffff; text-shadow: 1px 1px 2px black; }
+    .orange { color: #ff9933; }
+</style>
 </head>
 <body>
     <h1><span class="green">The</span> <span class="white">O'Faolain</span> <span class="orange">SMP</span></h1>
-    
+
     <div class="ip-container" onclick="copyIp()">
         <span id="ip-address">136.243.42.253:50229</span>
     </div>
@@ -92,10 +91,10 @@
             const tempInput = document.createElement('textarea');
             tempInput.value = ipAddress;
             document.body.appendChild(tempInput);
-            
+
             tempInput.select();
             document.execCommand('copy');
-            
+
             document.body.removeChild(tempInput);
 
             const ipContainer = document.querySelector('.ip-container');
@@ -109,7 +108,6 @@
 
         async function fetchServerStatus() {
             const statusText = document.getElementById('player-status-text');
-
             statusText.innerText = 'Fetching status...';
 
             try {
@@ -120,7 +118,6 @@
                 if (data.online) {
                     const onlinePlayers = data.players.online;
                     const maxPlayers = data.players.max;
-                    
                     statusText.innerHTML = `${onlinePlayers} / ${maxPlayers} players online`;
                 } else {
                     statusText.innerText = 'Server is currently offline.';
@@ -130,11 +127,8 @@
                 statusText.innerText = 'Error fetching server status.';
             }
         }
-        
-        // Fetch status on page load
-        fetchServerStatus();
 
-        // Refresh status every 30 seconds
+        fetchServerStatus();
         setInterval(fetchServerStatus, 30000);
     </script>
 </body>
