@@ -28,7 +28,7 @@
             width: 100%;
             height: 100%;
             background: url('stitchedv2.png') repeat-x;
-            background-size: auto 100%;
+            background-size: cover;
             animation: scroll 120s linear infinite;
             filter: blur(5px);
             z-index: -1;
@@ -47,7 +47,7 @@
             font-weight: 700;
         }
 
-        .ip-container {
+        .ip-container, .server-status-container, .player-list-container {
             margin-top: 1rem;
             padding: 0.5rem 1rem;
             background-color: rgba(255, 255, 255, 0.1);
@@ -55,18 +55,46 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             user-select: none;
+            text-shadow: 1px 1px 2px #000;
+            color: #fff;
         }
 
         .ip-container:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        #ip-address {
+        #ip-address, .status-text {
             font-size: 1.5em;
             color: #fff;
-            text-shadow: 1px 1px 2px #000;
+        }
+        
+        #players-online {
+            font-size: 1.2em;
         }
 
+        .player-list-container {
+            cursor: default;
+            margin-top: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none; 
+        }
+
+        .player-list-container.visible {
+            display: block;
+        }
+        
+        #player-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+        }
+
+        #player-list li {
+            padding: 0.2rem 0;
+        }
+        
         .green { color: #008000; }
         .white { color: #ffffff; text-shadow: 1px 1px 2px black; }
         .orange { color: #ff9933; }
@@ -74,11 +102,22 @@
 </head>
 <body>
     <h1><span class="green">The</span> <span class="white">O'Faolain</span> <span class="orange">SMP</span></h1>
+    
     <div class="ip-container" onclick="copyIp()">
         <span id="ip-address">136.243.42.253:50229</span>
     </div>
 
+    <div class="server-status-container">
+        <span id="player-status-text" class="status-text">Loading server status...</span>
+    </div>
+    
+    <div class="player-list-container">
+        <ul id="player-list"></ul>
+    </div>
+
     <script>
+        const serverIp = '136.243.42.253:50229';
+
         function copyIp() {
             const ipAddress = document.getElementById('ip-address').innerText;
             const tempInput = document.createElement('textarea');
@@ -98,6 +137,54 @@
                 ipContainer.innerHTML = originalText;
             }, 1500);
         }
+
+        async function fetchServerStatus() {
+            const statusText = document.getElementById('player-status-text');
+            const playerListContainer = document.querySelector('.player-list-container');
+            const playerList = document.getElementById('player-list');
+
+            statusText.innerText = 'Fetching status...';
+            playerListContainer.classList.remove('visible');
+            playerList.innerHTML = '';
+
+            try {
+                const url = `https://api.mcsrvstat.us/2/${serverIp}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.online) {
+                    const onlinePlayers = data.players.online;
+                    const maxPlayers = data.players.max;
+                    
+                    statusText.innerHTML = `<span id="players-online">${onlinePlayers}</span> / <span id="players-max">${maxPlayers}</span> players online`;
+
+                    if (data.players.list) {
+                        playerList.innerHTML = '';
+                        data.players.list.forEach(player => {
+                            const listItem = document.createElement('li');
+                            listItem.innerText = player.name;
+                            playerList.appendChild(listItem);
+                        });
+                        playerListContainer.classList.add('visible');
+                    } else if (onlinePlayers > 0) {
+                    
+                        playerList.innerHTML = '<li>Player list is hidden.</li>';
+                        playerListContainer.classList.add('visible');
+                    }
+                } else {
+                    statusText.innerText = 'Server is currently offline.';
+                    playerListContainer.classList.remove('visible');
+                }
+            } catch (error) {
+                console.error('Failed to fetch server status:', error);
+                statusText.innerText = 'Error fetching server status.';
+                playerListContainer.classList.remove('visible');
+            }
+        }
+        
+        fetchServerStatus();
+        
+        setInterval(fetchServerStatus, 30000);
     </script>
 </body>
 </html>
