@@ -35,19 +35,19 @@
         left: 0;
         width: 100%;
         height: 100%;
-        /* Swapped to your new 4K dirt background */
         background-image: url('dirtBG.png');
-        background-repeat: repeat-y; /* Repeats vertically */
-        background-size: 100vw auto; /* Forces it to fit the width of any monitor */
+        background-repeat: repeat-y; 
+        background-size: 100vw auto; 
+        background-position: 0 0; /* Anchor point fixed */
         animation: scroll-vertical 120s linear infinite; 
         filter: blur(5px);
         z-index: -1;
     }
 
-    /* Scrolls the background on the Y-axis. Assuming 4K height is ~2160px */
+    /* Scrolls the background on the Y-axis smoothly */
     @keyframes scroll-vertical {
-        0% { background-position: center 0px; }
-        100% { background-position: center 2160px; } 
+        0% { background-position-y: 0px; }
+        100% { background-position-y: 2160px; } 
     }
 
     h1 {
@@ -123,7 +123,6 @@
             statusText.innerText = 'Fetching status...';
 
             try {
-                // Rolled back to v2 API to fix the fetching error
                 const url = `https://api.mcsrvstat.us/2/${serverIp}`;
                 const response = await fetch(url);
                 const data = await response.json();
