@@ -4,25 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Bothy</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
+<!-- This links your favicon! Make sure favicon.png is in the same folder as this file -->
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!-- Imports a blocky, Minecraft-style font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
     html, body {
         margin: 0;
         padding: 0;
-        /* Forces the page to take up the entire screen, removing white bars */
         width: 100vw;
         height: 100vh;
         overflow: hidden;
-        font-family: 'Inter', sans-serif;
+        /* Swapped to the new font */
+        font-family: 'Press Start 2P', monospace;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        /* This is the magic property that spaces your elements out! Increase/decrease as you like */
-        gap: 2rem; 
+        gap: 2.5rem; 
         position: relative;
-        background-color: #121212; /* Fallback color so you never see harsh white bars */
+        background-color: #121212; 
     }
 
     body::before {
@@ -32,9 +36,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('stitchedv2.png') repeat-x;
-        /* Ensures the background image stretches to fill the height, and repeats endlessly to the right */
-        background-size: auto 100vh; 
+        /* Split the background properties to ensure cross-browser compatibility */
+        background-image: url('stitchedv2.png');
+        background-repeat: repeat-x;
+        background-position: left top;
+        background-size: auto 100%; 
         animation: scroll 120s linear infinite; 
         filter: blur(5px);
         z-index: -1;
@@ -46,34 +52,37 @@
     }
 
     h1 {
-        font-size: 4em;
+        /* Scaled down slightly since the new font is very wide */
+        font-size: 3.5em;
         color: white;
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-        margin: 0; /* Reset margin because 'gap' handles the spacing now */
-        font-weight: 700;
+        text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8); /* Changed to a hard drop shadow for that MC look */
+        margin: 0; 
+        font-weight: 400;
         letter-spacing: 2px;
         text-align: center;
     }
 
     .ip-container, .server-status-container {
-        padding: 0.8rem 1.5rem; /* Made the boxes slightly thicker so it looks better spaced */
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
+        padding: 1.2rem 2rem; 
+        background-color: rgba(0, 0, 0, 0.4); /* Darkened the boxes slightly so the white font pops */
+        border: 2px solid rgba(255, 255, 255, 0.2); /* Added a subtle border */
+        border-radius: 0; /* Removed rounded corners to match the blocky MC aesthetic */
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
         user-select: none;
-        text-shadow: 1px 1px 2px #000;
-        color: #fff;
         text-align: center;
     }
 
     .ip-container:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(0, 0, 0, 0.6);
+        border-color: rgba(255, 255, 255, 0.5);
     }
 
     #ip-address, .status-text {
-        font-size: 1.5em;
+        font-size: 1.2em;
         color: #fff;
+        line-height: 1.5;
+        text-shadow: 2px 2px 0px #000;
     }
 </style>
 </head>
@@ -104,7 +113,7 @@
 
             const ipContainer = document.querySelector('.ip-container');
             const originalText = ipContainer.innerHTML;
-            ipContainer.innerHTML = '<span style="color: #aaffaa; font-size: 1.5em;">Copied!</span>';
+            ipContainer.innerHTML = '<span style="color: #55FF55; font-size: 1.2em; text-shadow: 2px 2px 0px #000;">Copied!</span>';
 
             setTimeout(() => {
                 ipContainer.innerHTML = originalText;
@@ -116,7 +125,6 @@
             statusText.innerText = 'Fetching status...';
 
             try {
-                // Upgraded to API v3 which handles custom ports better
                 const url = `https://api.mcsrvstat.us/3/${serverIp}`;
                 const response = await fetch(url);
                 const data = await response.json();
@@ -130,7 +138,7 @@
                 }
             } catch (error) {
                 console.error('Failed to fetch server status:', error);
-                statusText.innerText = 'Unable to reach API (Check adblocker).';
+                statusText.innerText = 'Unable to reach API.';
             }
         }
 
