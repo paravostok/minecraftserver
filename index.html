@@ -10,14 +10,19 @@
     html, body {
         margin: 0;
         padding: 0;
-        height: 100%;
+        /* Forces the page to take up the entire screen, removing white bars */
+        width: 100vw;
+        height: 100vh;
         overflow: hidden;
         font-family: 'Inter', sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        /* This is the magic property that spaces your elements out! Increase/decrease as you like */
+        gap: 2rem; 
         position: relative;
+        background-color: #121212; /* Fallback color so you never see harsh white bars */
     }
 
     body::before {
@@ -28,6 +33,8 @@
         width: 100%;
         height: 100%;
         background: url('stitchedv2.png') repeat-x;
+        /* Ensures the background image stretches to fill the height, and repeats endlessly to the right */
+        background-size: auto 100vh; 
         animation: scroll 120s linear infinite; 
         filter: blur(5px);
         z-index: -1;
@@ -42,14 +49,14 @@
         font-size: 4em;
         color: white;
         text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-        margin: 0.2em 0;
+        margin: 0; /* Reset margin because 'gap' handles the spacing now */
         font-weight: 700;
         letter-spacing: 2px;
+        text-align: center;
     }
 
     .ip-container, .server-status-container {
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
+        padding: 0.8rem 1.5rem; /* Made the boxes slightly thicker so it looks better spaced */
         background-color: rgba(255, 255, 255, 0.1);
         border-radius: 0.5rem;
         cursor: pointer;
@@ -57,6 +64,7 @@
         user-select: none;
         text-shadow: 1px 1px 2px #000;
         color: #fff;
+        text-align: center;
     }
 
     .ip-container:hover {
@@ -96,7 +104,7 @@
 
             const ipContainer = document.querySelector('.ip-container');
             const originalText = ipContainer.innerHTML;
-            ipContainer.innerHTML = '<span style="color: #aaffaa;">Copied!</span>';
+            ipContainer.innerHTML = '<span style="color: #aaffaa; font-size: 1.5em;">Copied!</span>';
 
             setTimeout(() => {
                 ipContainer.innerHTML = originalText;
@@ -108,7 +116,8 @@
             statusText.innerText = 'Fetching status...';
 
             try {
-                const url = `https://api.mcsrvstat.us/2/${serverIp}`;
+                // Upgraded to API v3 which handles custom ports better
+                const url = `https://api.mcsrvstat.us/3/${serverIp}`;
                 const response = await fetch(url);
                 const data = await response.json();
 
@@ -121,7 +130,7 @@
                 }
             } catch (error) {
                 console.error('Failed to fetch server status:', error);
-                statusText.innerText = 'Error fetching server status.';
+                statusText.innerText = 'Unable to reach API (Check adblocker).';
             }
         }
 
