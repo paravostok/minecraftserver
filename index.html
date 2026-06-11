@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The O'Faolain SMP</title>
+<title>The Bothy</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
@@ -41,9 +41,10 @@
     h1 {
         font-size: 4em;
         color: white;
-        text-shadow: 2px 2px 6px black;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
         margin: 0.2em 0;
         font-weight: 700;
+        letter-spacing: 2px;
     }
 
     .ip-container, .server-status-container {
@@ -66,17 +67,13 @@
         font-size: 1.5em;
         color: #fff;
     }
-
-    .green { color: #008000; }
-    .white { color: #ffffff; text-shadow: 1px 1px 2px black; }
-    .orange { color: #ff9933; }
 </style>
 </head>
 <body>
-    <h1><span class="green">The</span> <span class="white">O'Faolain</span> <span class="orange">SMP</span></h1>
+    <h1>The Bothy</h1>
 
     <div class="ip-container" onclick="copyIp()">
-        <span id="ip-address">136.243.42.253:50229</span>
+        <span id="ip-address">81.16.176.157:7181</span>
     </div>
 
     <div class="server-status-container">
@@ -84,7 +81,7 @@
     </div>
 
     <script>
-        const serverIp = '136.243.42.253:50229';
+        const serverIp = '81.16.176.157:7181';
 
         function copyIp() {
             const ipAddress = document.getElementById('ip-address').innerText;
